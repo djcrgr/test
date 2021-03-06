@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Max;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,6 +39,9 @@ public class ApiController {
     public ResponseEntity<List<ExternalCar>> getAllEmployees(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize) {
+        if (pageNo > (externalCarsApiService.loadAllCars().size() / 10)) {//fixed
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.ok(externalCarsApiService.getAllPaginated(pageNo, pageSize));
     }
 
@@ -48,12 +53,13 @@ public class ApiController {
         else cars = carsApiService.getCarsInfo();
         Stream<? extends ICarInfo> carsStream = cars.stream();
         if (carRequestParameters.getCountry() != null) {
-            carsStream = carsStream.filter(carInfo -> carInfo.getCountry().matches(carRequestParameters.getCountry()));
+            carsStream = carsStream.filter(carInfo -> carInfo.getCountry().contains(carRequestParameters.getCountry()));
         }
         if (carRequestParameters.getSegment() != null) {
-            carsStream = carsStream.filter(carInfo -> carInfo.getSegment().matches(carRequestParameters.getSegment()));
+            carsStream = carsStream.filter(carInfo -> carInfo.getSegment().contains(carRequestParameters.getSegment()));
         }
         if (carRequestParameters.getMinEngineDisplacement() != null) {
+
             carsStream = carsStream.filter(carInfo -> carInfo.getEngineDisplacement() >= carRequestParameters.getMinEngineDisplacement());
         }
         if (carRequestParameters.getMinEngineHorsepower() != null) {
@@ -63,16 +69,16 @@ public class ApiController {
             carsStream = carsStream.filter(carInfo -> carInfo.getEngineDisplacement() >= carRequestParameters.getMinMaxSpeed());
         }
         if (carRequestParameters.getSearch() != null) {
-            carsStream = carsStream.filter(carInfo -> carInfo.getModel().matches(carRequestParameters.getSearch()) ||
-                    carInfo.getGeneration().matches(carRequestParameters.getSearch()) ||
-                    carInfo.getModification().matches(carRequestParameters.getSearch()));
+            carsStream = carsStream.filter(carInfo -> carInfo.getModel().contains(carRequestParameters.getSearch()) ||
+                    carInfo.getGeneration().contains(carRequestParameters.getSearch()) ||
+                    carInfo.getModification().contains(carRequestParameters.getSearch()));
         }
         if (carRequestParameters.getYear() != null) {
             carsStream = carsStream.filter(carInfo -> carInfo.getStartYear() <= carRequestParameters.getYear() &&
                     carInfo.getEndYear() >= carRequestParameters.getYear());
         }
         if (carRequestParameters.getBodyStyle() != null) {
-            carsStream = carsStream.filter(carInfo -> carInfo.getBodyStyle().matches(carRequestParameters.getBodyStyle()));
+            carsStream = carsStream.filter(carInfo -> carInfo.getBodyStyle().contains(carRequestParameters.getBodyStyle()));
         }
         return ResponseEntity.ok(carsStream.collect(Collectors.toList()));
     }

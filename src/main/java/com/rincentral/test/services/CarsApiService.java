@@ -17,6 +17,10 @@ public class CarsApiService {
     private final List<CarFullInfo> fullInfoList = new ArrayList<>();
     private final List<CarInfo> infoList = new ArrayList<>();
     private final Map<Integer, ExternalBrand> brandMap = new HashMap<>();
+    private List<ExternalBrand> externalBrandList;
+    private List<ExternalCar> externalCars;
+    private ExternalCarInfo externalCarInfo;
+
 
     @Autowired
     public CarsApiService(ExternalCarsApiService externalCarApi) {
@@ -25,13 +29,13 @@ public class CarsApiService {
 
     @PostConstruct
     private void init() {
-        List<ExternalCar> externalCars = externalCarApi.loadAllCars();
-        List<ExternalBrand> externalBrandList = externalCarApi.loadAllBrands();
+        externalCars = externalCarApi.loadAllCars();
+        externalBrandList = externalCarApi.loadAllBrands();
         for (ExternalBrand brand : externalBrandList) {
             brandMap.put(brand.getId(), brand);
         }
         for (ExternalCar externalCar : externalCars) {
-            ExternalCarInfo externalCarInfo = externalCarApi.loadCarInformationById(externalCar.getId());
+            externalCarInfo = externalCarApi.loadCarInformationById(externalCar.getId());
             fullInfoList.add(new CarFullInfo(externalCarInfo.getId(), externalCarInfo.getSegment(), brandMap.get(externalCarInfo.getBrandId()),
                     externalCarInfo.getModel(), externalCarInfo.getGeneration(), externalCarInfo.getModification(),
                     externalCarInfo.getYearsRange(), new EngineCharacteristics(externalCarInfo.getFuelType(), externalCarInfo.getEngineType(),
@@ -45,11 +49,12 @@ public class CarsApiService {
     }
 
     public List<CarInfo> getCarsInfo() {
+        init();
         return infoList;
     }
 
     public List<CarFullInfo> getCarsFullInfo() {
+        init();
         return fullInfoList;
     }
-
 }

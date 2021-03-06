@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -71,4 +73,60 @@ public class ExternalCarInfo {
 
     @JsonProperty("max_speed")
     private Integer maxSpeed;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExternalCarInfo that = (ExternalCarInfo) o;
+        return getId().equals(that.getId()) &&
+                getSegment().equals(that.getSegment()) &&
+                getBrandId().equals(that.getBrandId()) &&
+                getModel().equals(that.getModel()) &&
+                getGeneration().equals(that.getGeneration()) &&
+                getModification().equals(that.getModification()) &&
+                getYearsRange().equals(that.getYearsRange()) &&
+                getFuelType() == that.getFuelType() &&
+                getEngineType() == that.getEngineType() &&
+                getEngineDisplacement().equals(that.getEngineDisplacement()) &&
+                getHp().equals(that.getHp()) &&
+                getGearboxType() == that.getGearboxType() &&
+                getWheelDriveType() == that.getWheelDriveType() &&
+                getBodyLength().equals(that.getBodyLength()) &&
+                getBodyWidth().equals(that.getBodyWidth()) &&
+                getBodyHeight().equals(that.getBodyHeight()) &&
+                getBodyStyle().equals(that.getBodyStyle()) &&
+                getAcceleration().equals(that.getAcceleration()) &&
+                getMaxSpeed().equals(that.getMaxSpeed());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getModel());
+    }
+
+    @Override
+    public String toString() {
+        return "ExternalCarInfo{" +
+                "id=" + id +
+                ", segment='" + segment + '\'' +
+                ", brandId=" + brandId +
+                ", model='" + model + '\'' +
+                ", generation='" + generation + '\'' +
+                ", modification='" + modification + '\'' +
+                ", yearsRange='" + yearsRange + '\'' +
+                ", fuelType=" + fuelType +
+                ", engineType=" + engineType +
+                ", engineDisplacement=" + engineDisplacement +
+                ", hp=" + hp +
+                ", gearboxType=" + gearboxType +
+                ", wheelDriveType=" + wheelDriveType +
+                ", bodyLength=" + bodyLength +
+                ", bodyWidth=" + bodyWidth +
+                ", bodyHeight=" + bodyHeight +
+                ", bodyStyle='" + bodyStyle + '\'' +
+                ", acceleration=" + acceleration +
+                ", maxSpeed=" + maxSpeed +
+                '}';
+    }
 }

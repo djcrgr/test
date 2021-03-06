@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Calendar;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -90,9 +91,53 @@ public class CarFullInfo implements ICarInfo{
     public Integer getEndYear() {
         String endYear = yearsRange.split("-")[1];
         if (endYear.equals("present")) {
-            return Calendar.YEAR;
+            return Calendar.getInstance().get(Calendar.YEAR);
         } else {
             return Integer.parseInt(endYear);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarFullInfo that = (CarFullInfo) o;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getSegment(), that.getSegment()) &&
+                Objects.equals(getBrand(), that.getBrand()) &&
+                Objects.equals(getModel(), that.getModel()) &&
+                Objects.equals(getGeneration(), that.getGeneration()) &&
+                Objects.equals(getModification(), that.getModification()) &&
+                Objects.equals(getYearsRange(), that.getYearsRange()) &&
+                Objects.equals(getEngineCharacteristics(), that.getEngineCharacteristics()) &&
+                getGearboxType() == that.getGearboxType() &&
+                getWheelDriveType() == that.getWheelDriveType() &&
+                Objects.equals(getBodyCharacteristics(), that.getBodyCharacteristics()) &&
+                Objects.equals(getAcceleration(), that.getAcceleration()) &&
+                Objects.equals(getMaxSpeed(), that.getMaxSpeed());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getSegment(), getBrand(), getModel(), getGeneration(), getModification(), getYearsRange(), getEngineCharacteristics(), getGearboxType(), getWheelDriveType(), getBodyCharacteristics(), getAcceleration(), getMaxSpeed());
+    }
+
+    @Override
+    public String toString() {
+        return "CarFullInfo{" +
+                "id=" + id +
+                ", segment='" + segment + '\'' +
+                ", brand=" + brand +
+                ", model='" + model + '\'' +
+                ", generation='" + generation + '\'' +
+                ", modification='" + modification + '\'' +
+                ", yearsRange='" + yearsRange + '\'' +
+                ", engineCharacteristics=" + engineCharacteristics +
+                ", gearboxType=" + gearboxType +
+                ", wheelDriveType=" + wheelDriveType +
+                ", bodyCharacteristics=" + bodyCharacteristics +
+                ", acceleration=" + acceleration +
+                ", maxSpeed=" + maxSpeed +
+                '}';
     }
 }

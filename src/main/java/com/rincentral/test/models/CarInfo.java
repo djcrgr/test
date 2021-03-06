@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -64,5 +66,38 @@ public class CarInfo implements ICarInfo{
     @Override
     public String getBodyStyle() {
         return carFullInfo.getBodyStyle();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarInfo carInfo = (CarInfo) o;
+        return Objects.equals(getId(), carInfo.getId()) &&
+                Objects.equals(getSegment(), carInfo.getSegment()) &&
+                Objects.equals(getBrand(), carInfo.getBrand()) &&
+                Objects.equals(getModel(), carInfo.getModel()) &&
+                Objects.equals(getCountry(), carInfo.getCountry()) &&
+                Objects.equals(getGeneration(), carInfo.getGeneration()) &&
+                Objects.equals(getModification(), carInfo.getModification()) &&
+                Objects.equals(getCarFullInfo(), carInfo.getCarFullInfo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getSegment(), getBrand(), getModel(), getCountry(), getGeneration(), getModification(), getCarFullInfo());
+    }
+
+    @Override
+    public String toString() {
+        return "CarInfo{" +
+                "id=" + id +
+                ", segment='" + segment + '\'' +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", country='" + country + '\'' +
+                ", generation='" + generation + '\'' +
+                ", modification='" + modification + '\'' +
+                '}';
     }
 }
