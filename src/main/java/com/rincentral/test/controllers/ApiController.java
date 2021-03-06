@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,7 +38,7 @@ public class ApiController {
     public ResponseEntity<List<ExternalCar>> getAllEmployees(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize) {
-        if (pageNo > (externalCarsApiService.loadAllCars().size() / 10)) {//fixed
+        if (pageNo > (externalCarsApiService.loadAllCars().size() / 10) || pageNo < 0) {//fixed
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok(externalCarsApiService.getAllPaginated(pageNo, pageSize));
